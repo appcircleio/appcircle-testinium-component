@@ -17,7 +17,7 @@ $password = env_has_key('AC_TESTINIUM_PASSWORD')
 $plan_id = env_has_key('AC_TESTINIUM_PLAN_ID')
 $project_id = env_has_key('AC_TESTINIUM_PROJECT_ID')
 $test_timeout = env_has_key('AC_TESTINIUM_TIMEOUT').to_i
-$ac_max_failure_percentage = env_has_key('AC_MAX_FAIL_LIMIT_PERCENTAGE').to_i
+$ac_max_failure_percentage = env_has_key('AC_TESTINIUM_MAX_FAIL_PERCENTAGE').to_i
 $company_id = env_has_key('AC_TESTINIUM_COMPANY_ID')
 
 def calc_percent(numerator, denominator)

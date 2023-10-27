@@ -33,6 +33,18 @@ inputs:
   title: Plan ID
   description: Testinium plan id
   helpText:
+- key: "AC_TESTINIUM_COMPANY_ID"
+  defaultValue: "AC_TESTINIUM_COMPANY_ID"
+  isRequired: true
+  title: Company ID
+  description: Testinium company id
+  helpText:
+- key: "AC_TESTINIUM_MAX_FAIL_PERCENTAGE"
+  defaultValue: "AC_TESTINIUM_MAX_FAIL_PERCENTAGE"
+  isRequired: true
+  title: Max Failure Percentage
+  description: "Maximum failure percentage limit to interrupt workflow."
+  helpText:
 - key: "AC_TESTINIUM_TIMEOUT"
   defaultValue: "600"
   isRequired: true
