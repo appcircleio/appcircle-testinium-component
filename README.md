@@ -10,3 +10,4 @@ Run your test plans with Testinium
 - `AC_TESTINIUM_PROJECT_ID`: Project ID. Testinium project id
 - `AC_TESTINIUM_PLAN_ID`: Plan ID. Testinium plan id
 - `AC_TESTINIUM_TIMEOUT`: Timeout. Testinium plan timeout in seconds
+# appcircle-ios
