@@ -22,7 +22,8 @@ $company_id = env_has_key('AC_TESTINIUM_COMPANY_ID')
 
 def calc_percent(numerator, denominator)
   if !(numerator>=0) || !(denominator>=0)
-    abort "Invalid numerator or denominator numbers"
+    puts "Invalid numerator or denominator numbers"
+    exit(1)
   elsif numerator==0 || denominator==0
     return 0
   else
@@ -120,7 +121,8 @@ def start(access_token)
   case res
   when Net::HTTPClientError, Net::HTTPServerError
     puts(res.body)
-    abort "\nError starting plan: #{res.code} (#{res.message})\n\n"
+    puts "\nError starting plan: #{res.code} (#{res.message})\n\n"
+    exit(1)
   end
   JSON.parse(res.body, symbolize_names: true)[:execution_id]
 end
@@ -135,7 +137,8 @@ def get_report(execution_id, access_token)
   case res
   when Net::HTTPClientError, Net::HTTPServerError
     puts(res.body)
-    abort "\nError getting report: #{res.code} (#{res.message})\n\n"
+    puts "\nError getting report: #{res.code} (#{res.message})\n\n"
+    exit(1)
   end
 
   data = JSON.parse(res.body, symbolize_names: true)
@@ -156,7 +159,8 @@ def get_report(execution_id, access_token)
 
 
   if max_failure_percentage <= failure_percentage || !result_summary[:ERROR].nil?
-    abort "Plan execution was not successful #{data[:test_result_status_counts]}"
+    puts "Plan execution was not successful #{data[:test_result_status_counts]}"
+    exit(1)
   else
     puts("Plan execution was successful #{data[:test_result_status_counts]}")
   end
@@ -175,7 +179,8 @@ def check_status(test_timeout, access_token)
   end
   case res
   when Net::HTTPClientError, Net::HTTPServerError
-    abort "\nError checking status: #{res.code} (#{res.body})\n\n"
+    puts "\nError checking status: #{res.code} (#{res.body})\n\n"
+    exit(1)
   end
   is_running = JSON.parse(res.body, symbolize_names: true)[:running]
   if is_running
