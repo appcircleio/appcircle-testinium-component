@@ -46,7 +46,7 @@ inputs:
   description: "Maximum failure percentage limit to interrupt workflow."
   helpText:
 - key: "AC_TESTINIUM_TIMEOUT"
-  defaultValue: "600"
+  defaultValue: "6000"
   isRequired: true
   title: Timeout
   description: Testinium plan timeout in seconds
