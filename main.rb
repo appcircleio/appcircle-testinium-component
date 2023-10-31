@@ -159,10 +159,10 @@ def get_report(execution_id, access_token)
 
 
   if max_failure_percentage <= failure_percentage || !result_summary[:ERROR].nil?
-    puts "Plan execution was not successful #{data[:test_result_status_counts]}"
+    puts "The number of failures in the plan exceeded the maximum rate. The process is being stopped. #{data[:test_result_status_counts]}"
     exit(1)
   else
-    puts("Plan execution was successful #{data[:test_result_status_counts]}")
+    puts("Number of failures is below the maximum rate. Process continues. #{data[:test_result_status_counts]}")
   end
 end
 
@@ -194,20 +194,28 @@ def check_status(test_timeout, access_token)
 end
 
 access_token = login()
-
-raise("Can't login with given credentials") if access_token.nil?
+raise("Cannot login to Testinium with given credentials") if access_token.nil?
 
 project = find_project(access_token)
-puts "Uploading #{$file_name}..."
-file_response = upload(access_token)
+raise("Cannot find projects in Testinium") if project.nil?
 
+puts "Uploading #{$file_name} to Testinium..."
+file_response = upload(access_token)
+raise("File cannot upload to Testinium successfully") if file_response.nil?
+
+puts "Testinium project is updating..."
 update_status = update_project(project, file_response, access_token)
+raise("Cannot update project successfully") if update_status.nil?
 puts 'Project updated successfully'
-puts('Checking the status of plan...')
+
+puts('Checking the plan status to start a new test plan...')
 check_status($test_timeout, access_token)
-# wait for other execution
+
+puts('Starting a new test plan...')
 execution_id = start(access_token)
+raise("Cannot start Testinium plan successfully") if execution_id.nil?
 puts("Plan started successfully. Execution Id: #{execution_id}")
+
 puts('Checking the status of plan...')
 status = check_status($test_timeout, access_token)
 get_report(execution_id, access_token) if status
