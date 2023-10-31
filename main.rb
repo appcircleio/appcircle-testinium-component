@@ -17,14 +17,14 @@ $password = env_has_key('AC_TESTINIUM_PASSWORD')
 $plan_id = env_has_key('AC_TESTINIUM_PLAN_ID')
 $project_id = env_has_key('AC_TESTINIUM_PROJECT_ID')
 $test_timeout = env_has_key('AC_TESTINIUM_TIMEOUT').to_i
-$ac_max_failure_percentage = env_has_key('AC_TESTINIUM_MAX_FAIL_PERCENTAGE').to_i
+$ac_max_failure_percentage = (ENV['AC_TESTINIUM_MAX_FAIL_PERCENTAGE'] || 0).to_i
 $company_id = env_has_key('AC_TESTINIUM_COMPANY_ID')
 
 def calc_percent(numerator, denominator)
-  if !(numerator>=0) || !(denominator>=0)
+  if !(denominator>=0)
     puts "Invalid numerator or denominator numbers"
     exit(1)
-  elsif numerator==0 || denominator==0
+  elsif denominator==0
     return 0
   else
     return numerator.to_f / denominator.to_f * 100.0
@@ -146,10 +146,8 @@ def get_report(execution_id, access_token)
   result_failure_summary = result_summary[:FAILURE] || 0
   result_error_summary = result_summary[:ERROR] || 0
   result_success_summary = result_summary[:SUCCESS] || 0
-  total_summary=result_failure_summary+result_error_summary+result_success_summary
   puts "Test result summary: #{result_summary}"
-  failure_percentage=calc_percent(result_failure_summary,total_summary)
-  max_failure_percentage = calc_percent($ac_max_failure_percentage, 100)
+  total_summary=result_failure_summary+result_error_summary+result_success_summary
 
   open(ENV['AC_ENV_FILE_PATH'], 'a') { |f|
     f.puts "AC_TESTINIUM_RESULT_FAILURE_SUMMARY=#{result_failure_summary}"
@@ -157,12 +155,21 @@ def get_report(execution_id, access_token)
     f.puts "AC_TESTINIUM_RESULT_SUCCESS_SUMMARY=#{result_success_summary}"
   }
 
+  if ac_max_failure_percentage > 0 && result_failure_summary > 0
+    failure_percentage= calc_percent(result_failure_summary, total_summary)
+    max_failure_percentage = calc_percent($ac_max_failure_percentage, 100)
 
-  if max_failure_percentage <= failure_percentage || !result_summary[:ERROR].nil?
-    puts "The number of failures in the plan exceeded the maximum rate. The process is being stopped. #{data[:test_result_status_counts]}"
-    exit(1)
+    if max_failure_percentage <= failure_percentage || !result_summary[:ERROR].nil?
+      puts "The number of failures in the plan exceeded the maximum rate. The process is being stopped. #{data[:test_result_status_counts]}"
+      exit(1)
+    else
+      puts("Number of failures is below the maximum rate. Process continues. #{data[:test_result_status_counts]}")
+    end
   else
-    puts("Number of failures is below the maximum rate. Process continues. #{data[:test_result_status_counts]}")
+    warn_message = 'To calculate the failure rate, the following values must be greater than 0:'\
+    '\nAC_TESTINIUM_MAX_FAIL_PERCENTAGE: #{AC_TESTINIUM_MAX_FAIL_PERCENTAGE}'\
+    '\nTestinium Result Failure Summary: #{result_failure_summary}'
+    puts warn_message
   end
 end
 
