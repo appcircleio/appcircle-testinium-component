@@ -19,12 +19,13 @@ $project_id = env_has_key('AC_TESTINIUM_PROJECT_ID')
 $test_timeout = env_has_key('AC_TESTINIUM_TIMEOUT').to_i
 $ac_max_failure_percentage = (ENV['AC_TESTINIUM_MAX_FAIL_PERCENTAGE'] || 0).to_i
 $company_id = env_has_key('AC_TESTINIUM_COMPANY_ID')
+$time_period = 30
 
 def calc_percent(numerator, denominator)
-  if !(denominator>=0)
+  if !(denominator >= 0)
     puts "Invalid numerator or denominator numbers"
     exit(1)
-  elsif denominator==0
+  elsif denominator == 0
     return 0
   else
     return numerator.to_f / denominator.to_f * 100.0
@@ -192,8 +193,8 @@ def check_status(test_timeout, access_token)
   is_running = JSON.parse(res.body, symbolize_names: true)[:running]
   if is_running
     puts('Plan is still running...')
-    sleep(10)
-    check_status(test_timeout - 30, access_token)
+    sleep($time_period)
+    check_status(test_timeout - $time_period, access_token)
   else
     puts('Execution finished')
     true
