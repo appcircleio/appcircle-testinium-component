@@ -156,7 +156,7 @@ def get_report(execution_id, access_token)
     f.puts "AC_TESTINIUM_RESULT_SUCCESS_SUMMARY=#{result_success_summary}"
   }
 
-  if ac_max_failure_percentage > 0 && result_failure_summary > 0
+  if $ac_max_failure_percentage > 0 && result_failure_summary > 0
     failure_percentage= calc_percent(result_failure_summary, total_summary)
     max_failure_percentage = calc_percent($ac_max_failure_percentage, 100)
 
@@ -167,9 +167,9 @@ def get_report(execution_id, access_token)
       puts("Number of failures is below the maximum rate. Process continues. #{data[:test_result_status_counts]}")
     end
   else
-    warn_message = 'To calculate the failure rate, the following values must be greater than 0:'\
-    '\nAC_TESTINIUM_MAX_FAIL_PERCENTAGE: #{AC_TESTINIUM_MAX_FAIL_PERCENTAGE}'\
-    '\nTestinium Result Failure Summary: #{result_failure_summary}'
+    warn_message = "To calculate the failure rate, the following values must be greater than 0:"\
+    "\nAC_TESTINIUM_MAX_FAIL_PERCENTAGE: #{$ac_max_failure_percentage}"\
+    "\nTestinium Result Failure Summary: #{result_failure_summary}"
     puts warn_message
   end
 end
