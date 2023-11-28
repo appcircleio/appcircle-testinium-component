@@ -69,9 +69,9 @@ outputs:
   defaultValue: "AC_TESTINIUM_RESULT_FAILURE_SUMMARY"
   helpText:
 - key: "AC_TESTINIUM_RESULT_SUCCESS_SUMMARY"
-  title: "Total Number of Succeses"
+  title: "Total Number of Successes"
   defaultValue: "AC_TESTINIUM_RESULT_FAILURE_SUMMARY"
-  description: "Total number of succeses in test results."
+  description: "Total number of successes in test results."
   helpText:
 processFilename: ruby
 processArguments: '%AC_STEP_TEMP%/main.rb'
