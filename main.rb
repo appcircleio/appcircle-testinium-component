@@ -302,7 +302,7 @@ def get_report(execution_id, access_token)
       puts "Test result summary: #{result_summary}"
       total_summary = result_failure_summary + result_error_summary + result_success_summary
 
-      open($env_file_path, 'a') { |f|
+      open("#{$env_file_path}", 'a') { |f|
         f.puts "AC_TESTINIUM_RESULT_FAILURE_SUMMARY=#{result_failure_summary}"
         f.puts "AC_TESTINIUM_RESULT_ERROR_SUMMARY=#{result_error_summary}"
         f.puts "AC_TESTINIUM_RESULT_SUCCESS_SUMMARY=#{result_success_summary}"
