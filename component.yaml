@@ -60,14 +60,17 @@ inputs:
 outputs:
 - key: "AC_TESTINIUM_RESULT_FAILURE_SUMMARY"
   title: "Total Number of Failures"
+  defaultValue: "AC_TESTINIUM_RESULT_FAILURE_SUMMARY"
   description: "Total number of failures in test results."
   helpText:
 - key: "AC_TESTINIUM_RESULT_ERROR_SUMMARY"
   title: "Total Number of Errors"
   description: "Total number of errors in test results."
+  defaultValue: "AC_TESTINIUM_RESULT_FAILURE_SUMMARY"
   helpText:
 - key: "AC_TESTINIUM_RESULT_SUCCESS_SUMMARY"
   title: "Total Number of Succeses"
+  defaultValue: "AC_TESTINIUM_RESULT_FAILURE_SUMMARY"
   description: "Total number of succeses in test results."
   helpText:
 processFilename: ruby
