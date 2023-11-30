@@ -50,7 +50,7 @@ def check_timeout()
   now = DateTime.now
 
   if(now > $end_time)
-    puts 'The component is terminating due to a timeout exceeded. \n
+    puts 'The component is terminating due to a timeout exceeded.
      If you want to allow more time, please increase the AC_TESTINIUM_TIMEOUT input value.'
     exit(1)
   end
@@ -64,10 +64,9 @@ def login()
   puts "Logging in to Testinium..."
   uri = URI.parse('https://account.testinium.com/uaa/oauth/token')
   token = 'dGVzdGluaXVtU3VpdGVUcnVzdGVkQ2xpZW50OnRlc3Rpbml1bVN1aXRlU2VjcmV0S2V5'
-  is_success = false
   count = 1
 
-  while !is_success && is_count_less_than_max_api_retry(count) do
+  while is_count_less_than_max_api_retry(count) do
     check_timeout()
     puts("Signing in. Number of attempts: #{count}")
 
@@ -79,7 +78,6 @@ def login()
     end
 
     if (res.kind_of? Net::HTTPSuccess)
-      is_success = true
       puts('Successfully logged in...')
       return get_parsed_response(res.body)[:access_token]
     elsif (res.kind_of? Net::HTTPUnauthorized)
@@ -94,11 +92,10 @@ def login()
 end
 
 def check_status(access_token)
-  is_success = false
   count = 1
   uri = URI.parse("https://testinium.io/Testinium.RestApi/api/plans/#{$plan_id}/checkIsRunning")
 
-  while !is_success && is_count_less_than_max_api_retry(count) do
+  while is_count_less_than_max_api_retry(count) do
     check_timeout()
     req = Net::HTTP::Get.new(uri.request_uri,
                              { 'Content-Type' => 'application/json', 'Authorization' => "Bearer #{access_token}", 'current-company-id' => "#{$company_id}" })
@@ -126,11 +123,10 @@ def check_status(access_token)
 end
 
 def find_project(access_token)
-  is_success = false
   count = 1
   puts("Starting to find the project...")
 
-  while !is_success && is_count_less_than_max_api_retry(count) do
+  while is_count_less_than_max_api_retry(count) do
     check_timeout()
     puts("Finding project. Number of attempts: #{count}")
 
@@ -156,10 +152,9 @@ def find_project(access_token)
 end
 
 def upload(access_token)
-  is_success = false
   count = 1
 
-  while !is_success && is_count_less_than_max_api_retry(count) do
+  while is_count_less_than_max_api_retry(count) do
     check_timeout()
     puts("Uploading #{$file_name} to Testinium... Number of attempts: #{count}")
 
@@ -190,7 +185,6 @@ def upload(access_token)
 end
 
 def update_project(project, file_response, access_token)
-  is_success = false
   count = 1
 
   file_token = file_response[:file_token]
@@ -224,7 +218,7 @@ def update_project(project, file_response, access_token)
     raise 'Error: Only can resign .apk files and .ipa files.'
   end
 
-  while !is_success && is_count_less_than_max_api_retry(count) do
+  while is_count_less_than_max_api_retry(count) do
     check_timeout()
     puts("Testinium project is updating... Number of attempts: #{count}")
     uri = URI.parse("https://testinium.io/Testinium.RestApi/api/projects/#{project[:id]}")
@@ -250,10 +244,9 @@ def update_project(project, file_response, access_token)
 end
 
 def start(access_token)
-  is_success = false
   count = 1
 
-  while !is_success && is_count_less_than_max_api_retry(count) do
+  while is_count_less_than_max_api_retry(count) do
     check_timeout()
     puts("Starting a new test plan... Number of attempts: #{count}")
     uri = URI.parse("https://testinium.io/Testinium.RestApi/api/plans/#{$plan_id}/run")
@@ -278,10 +271,9 @@ def start(access_token)
 end
 
 def get_report(execution_id, access_token)
-  is_success = false
   count = 1
 
-  while !is_success && is_count_less_than_max_api_retry(count) do
+  while is_count_less_than_max_api_retry(count) do
     check_timeout()
     puts("Starting to get the report...Number of attempts: #{count}")
     uri = URI.parse("https://testinium.io/Testinium.RestApi/api/executions/#{execution_id}")
@@ -324,6 +316,7 @@ def get_report(execution_id, access_token)
           "\nTestinium Result Failure Summary: #{result_failure_summary}"
         puts warn_message
       end
+
       return
     elsif (res.kind_of? Net::HTTPClientError)
       puts(get_parsed_response(res.body)[:message])
@@ -340,7 +333,7 @@ access_token = login()
 check_status(access_token)
 project = find_project(access_token)
 file_response = upload(access_token)
-update_status = update_project(project, file_response, access_token)
+update_project(project, file_response, access_token)
 execution_id = start(access_token)
 check_status(access_token)
 get_report(execution_id, access_token)

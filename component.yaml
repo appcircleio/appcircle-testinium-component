@@ -66,11 +66,11 @@ outputs:
 - key: "AC_TESTINIUM_RESULT_ERROR_SUMMARY"
   title: "Total Number of Errors"
   description: "Total number of errors in test results."
-  defaultValue: "AC_TESTINIUM_RESULT_FAILURE_SUMMARY"
+  defaultValue: "AC_TESTINIUM_RESULT_ERROR_SUMMARY"
   helpText:
 - key: "AC_TESTINIUM_RESULT_SUCCESS_SUMMARY"
   title: "Total Number of Successes"
-  defaultValue: "AC_TESTINIUM_RESULT_FAILURE_SUMMARY"
+  defaultValue: "AC_TESTINIUM_RESULT_SUCCESS_SUMMARY"
   description: "Total number of successes in test results."
   helpText:
 processFilename: ruby
