@@ -15,3 +15,9 @@ Run your test plans with Testinium
 ## Optional Inputs
 
 - `AC_TESTINIUM_MAX_FAIL_PERCENTAGE`: Maximum failure percentage limit to interrupt workflow. It must be in the range 1-100.
+
+## Output Variables
+
+- `AC_TESTINIUM_RESULT_FAILURE_SUMMARY`: Total number of failures in test results.
+- `AC_TESTINIUM_RESULT_ERROR_SUMMARY`: Total number of errors in test results.
+- `AC_TESTINIUM_RESULT_SUCCESS_SUMMARY`: Total number of succeses in test results.
