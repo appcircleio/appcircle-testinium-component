@@ -1,7 +1,7 @@
 platform: Common
 buildPlatform:
-displayName: Testinium App Upload
-description: "The Testinium App Upload step enables uploading mobile applications to the Testinium platform."
+displayName: Testinium
+description: "Enables uploading mobile applications to Testinium and running the selected test plan."
 inputs:
 - key: "AC_TESTINIUM_APP_PATH"
   defaultValue: "$AC_TESTINIUM_APP_PATH"
@@ -27,11 +27,23 @@ inputs:
   title: Project ID
   description: "Testinium project ID."
   helpText:
+- key: "AC_TESTINIUM_PLAN_ID"
+  defaultValue: "$AC_TESTINIUM_PLAN_ID"
+  isRequired: true
+  title: Plan ID
+  description: "Testinium plan ID."
+  helpText:
 - key: "AC_TESTINIUM_COMPANY_ID"
   defaultValue: "$AC_TESTINIUM_COMPANY_ID"
   isRequired: true
   title: Company ID
   description: "Testinium company ID."
+  helpText:
+- key: "AC_TESTINIUM_MAX_FAIL_PERCENTAGE"
+  defaultValue: "$AC_TESTINIUM_MAX_FAIL_PERCENTAGE"
+  isRequired: false
+  title: Max Failure Percentage
+  description: "Maximum failure percentage limit to interrupt workflow. It must be in the range 1-100."
   helpText:
 - key: "AC_TESTINIUM_TIMEOUT"
   defaultValue: "60"
@@ -44,6 +56,22 @@ inputs:
   isRequired: true
   title: Testinium Maximum API Repetition Count
   description: "Determine max repetition in case of Testinium platform congestion or API errors."
+  helpText:
+outputs:
+- key: "AC_TESTINIUM_RESULT_FAILURE_SUMMARY"
+  title: "Total Number of Failures"
+  defaultValue: "AC_TESTINIUM_RESULT_FAILURE_SUMMARY"
+  description: "Total number of failures in test results."
+  helpText:
+- key: "AC_TESTINIUM_RESULT_ERROR_SUMMARY"
+  title: "Total Number of Errors"
+  description: "Total number of errors in test results."
+  defaultValue: "AC_TESTINIUM_RESULT_ERROR_SUMMARY"
+  helpText:
+- key: "AC_TESTINIUM_RESULT_SUCCESS_SUMMARY"
+  title: "Total Number of Successes"
+  defaultValue: "AC_TESTINIUM_RESULT_SUCCESS_SUMMARY"
+  description: "Total number of successes in test results."
   helpText:
 processFilename: ruby
 processArguments: '%AC_STEP_TEMP%/main.rb'
